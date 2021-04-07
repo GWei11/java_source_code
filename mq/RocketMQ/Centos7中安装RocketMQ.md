@@ -1,5 +1,7 @@
 
 
+
+
 # 安装 RocketMQ
 
 * 使用 wget 命令将 RocketMQ 下载下来
@@ -217,6 +219,7 @@ export JAVA_HOME
 export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=$(dirname $0)/..
 #export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
+export CLASSPATH=${BASE_DIR}/lib/ext:${BASE_DIR}/lib/*:${BASE_DIR}/conf:${CLASSPATH}
 # JVM Configuration
 #JAVA_OPT="${JAVA_OPT} -server -Xms8g -Xmx8g -Xmn4g"
 JAVA_OPT="${JAVA_OPT} -server -Xms256m -Xmx256m -Xmn128m"
@@ -308,5 +311,21 @@ mqbroker -n localhost:9876
 
 ```shell
 nohup sh mqbroker -n localhost:9876 &  # 最后面的 & 符号表示后台启动
+```
+
+
+
+### 关闭服务
+
+关闭 broker 
+
+```shell
+mqshutdown broker
+```
+
+关闭 namesrv
+
+```shell
+mqshutdown namesrv
 ```
 
