@@ -1,81 +1,80 @@
 
 
+
+
 # 安装 RocketMQ
 
 * 使用 wget 命令将 RocketMQ 下载下来
 
-  ```shell
-  wget https://archive.apache.org/dist/rocketmq/4.5.1/rocketmq-all4.5.1-bin-release.zip
-  ```
+```shell
+wget https://archive.apache.org/dist/rocketmq/4.5.1/rocketmq-all4.5.1-bin-release.zip
+```
 
-  当然也是可以使用其他的版本，进入 [apach官网](https://archive.apache.org/dist/) ，然后找到 RocketMQ 对应的版本的地址即可。
+当然也是可以使用其他的版本，进入 [apach官网](https://archive.apache.org/dist/) ，然后找到 RocketMQ 对应的版本的地址即可。
 
 * 将下载下来的文件解压到 `/opt` 目录中
 
   ![](https://gitee.com/GWei11/picture/raw/master/20210406221638.png)
 
-  ```shell
-  unzip xxxx -d /opt
-  ```
+```shell
+unzip xxxx -d /opt
+```
 
-  这里 RocketMQ 是使用 zip 形式进行压缩的，所以需要 unzip 来进行解压，如果提示没有该命令的话需要使用下面的命令来进行安装。
+这里 RocketMQ 是使用 zip 形式进行压缩的，所以需要 unzip 来进行解压，如果提示没有该命令的话需要使用下面的命令来进行安装。
 
-  ```shell
-  yum install zip unzip
-  ```
+```shell
+yum install zip unzip
+```
 
 * 解压完成之后修改 `/etc/profile` 文件的内容，如下图所示，在该文件的末尾添加如下内容。
   ![](https://gitee.com/GWei11/picture/raw/master/20210406222108.png)
-
 * 修改完该配置文件之后，可能不会立即生效，所以最好使用 source 命令来更新一下该文件。
 
-  ```shell
-  source /etc/profile
-  ```
+```shell
+source /etc/profile
+```
 
-  
+
 
 # 安装 JDK
 
 * 到 [Oracle官网](https://www.oracle.com/java/technologies/javase-downloads.html#JDK16) 去下载 jdk ，比如我这里下载的是 `jdk-11.0.5-linux-x64.rpm` ( Linux版本的 )。
-
 * 可以使用 Xshell 连接远程的 Linux 服务器，然后使用 rz 命令来将下载的 jdk 上传到服务器中。
-
 * 使用下面的命令来进行安装
 
-  ```
-  rpm -ivh jdk-11.0.5-linux-x64.rpm
-  ```
+```
+rpm -ivh jdk-11.0.5-linux-x64.rpm
+```
 
 * 配置环境变量（就像在 Window 系统中配置 JAVA_HOME 环境变量一样）
 
-  ```shell
-  vim /etc/profile
-  ```
+```shell
+vim /etc/profile
+```
 
-  在最后面添加如下代码
+在最后面添加如下代码
 
-  ```shell
-  export JAVA_HOME=/usr/java/jdk-11.0.5
-  export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/jre/lib/dt.jar:$JAVA_HOME/lib
-  export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
-  ```
+```shell
+export JAVA_HOME=/usr/java/jdk-11.0.5
+export CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/jre/lib/dt.jar:$JAVA_HOME/lib
+export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+```
 
-  ![](https://gitee.com/GWei11/picture/raw/master/20210406223313.png)
+![](https://gitee.com/GWei11/picture/raw/master/20210406223313.png)
 
 * 检查是否安装完成
 
-  ```shell
-  java -version
-  ```
+```shell
+java -version
+```
 
 * rpm 卸载 jdk
 
-  ```shell
-  rpm -e jdk的版本
-  ```
+```shell
+rpm -e jdk的版本
+```
 
-  
+
 
 # 运行与关闭 RocketMQ 的操作
 
@@ -220,6 +219,7 @@ export JAVA_HOME
 export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=$(dirname $0)/..
 #export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
+export CLASSPATH=${BASE_DIR}/lib/ext:${BASE_DIR}/lib/*:${BASE_DIR}/conf:${CLASSPATH}
 # JVM Configuration
 #JAVA_OPT="${JAVA_OPT} -server -Xms8g -Xmx8g -Xmn4g"
 JAVA_OPT="${JAVA_OPT} -server -Xms256m -Xmx256m -Xmn128m"
@@ -311,5 +311,21 @@ mqbroker -n localhost:9876
 
 ```shell
 nohup sh mqbroker -n localhost:9876 &  # 最后面的 & 符号表示后台启动
+```
+
+
+
+### 关闭服务
+
+关闭 broker 
+
+```shell
+mqshutdown broker
+```
+
+关闭 namesrv
+
+```shell
+mqshutdown namesrv
 ```
 
