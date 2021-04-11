@@ -313,7 +313,31 @@ mqbroker -n localhost:9876
 nohup sh mqbroker -n localhost:9876 &  # 最后面的 & 符号表示后台启动
 ```
 
+**注意：**如果是在阿里云上面部署的 RocketMQ, 在本地启动 Producer 去访问的时候，可能 会出现 TooMuchRequestException 的异常，这时候启动的方式需要修改一下
 
+* 在启动 namesrv 过程中需要加上公网 ip 参数
+
+```shell
+nohup ./bin/mqnamesrv -n 公网ip:9876
+```
+
+* 修改 broker 对应的配置文件（当前目录在 RocketMQ 根目录中）
+
+```shell
+vim conf/broker.conf
+```
+
+ 在最后面加上一段：
+
+```shell
+brokerIP1=公网 ip
+```
+
+* broker 启动的时候需要加上参数，具体命令如下
+
+```shell
+nohup sh bin/mqbroker -n 你的公网IP:9876 -c conf/broker.conf autoCreateTopicEnable=true &
+```
 
 ### 关闭服务
 
