@@ -45,11 +45,11 @@ public void sendOneway(Message msg) throws MQClientException, RemotingException,
 }
 ```
 
-### 延迟发送
+### 延迟发送 TODO
 
 
 
-### 发送事务消息
+### 发送事务消息 TODO
 
 
 
@@ -292,7 +292,7 @@ pushConsumer.setMessageModel(MessageModel.BROADCASTING);
 
 ![](https://gitee.com/GWei11/picture/raw/master/20210410054121.png)
 
-# 消息的存储
+# 消息的存储 TODO
 
 
 
