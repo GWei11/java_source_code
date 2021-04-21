@@ -294,9 +294,36 @@ pushConsumer.setMessageModel(MessageModel.BROADCASTING);
 
 # 消息的存储 TODO
 
+* RocketMQ 使用文件系统来存储消息，即将消息存放在磁盘中（有同步写和异步写）
+* 磁盘顺序写的速度快，随机写的速度很慢，RocketMQ 使用的是**顺序写**
+
+* RocketMQ 消息的存储是由 ConsumerQueue 和 CommitLog 配合完成的，消息真正的物理存储文件是 CommitLog，ConsumerQueue 是消息的逻辑队列，ConsumerQueue 里面存储的内容是指向物理存储的地址。
+* 每一个 Topic 下的每一个 Message Queue 都有一个对应的 ConsumerQueue 文件（一个 Topic 有多个 Message Queue）
+
+![](https://gitee.com/GWei11/picture/raw/master/20210421072623.png)
+
+1. CommitLog：消息主体及元数据的存储主体，单个文件大小默认 1G，文件名长度为20位，文件名称按照字节偏移量来命名，比如第一个文件名是20个0， 然后 1G=1073741824b， 所以第二个文件名就是00000000001073741824
+   1. CommitLog 文件的存储位置： `/root/store/commitlog`
+
+![](https://gitee.com/GWei11/picture/raw/master/20210421073408.png)
 
 
 
+1. ConsumerQueue：消息消费队列，主要是为了提高消费的性能
+   1. ConsumerQueue 保存了指定 Topic 下的队列消息在 CommitLog 中的起始物理偏移量 offset
+   2. 保存了消息的大小
+   3. 保存了 Tag 的 HashCode 值
+2. ConsumerQueue 的文件夹组织方式如下
+   1.  topic/queue/file 三层组织结构
+
+![](https://gitee.com/GWei11/picture/raw/master/20210421073800.png)
+
+1. index：索引文件提供了一种可以通过 key 或时间区间来查询消息的方法
+   1. 索引文件存储位置是 `$HOME/store/index/${fileName}`
+   2. 索引文件名是以创建时间的时间戳来命名的
+   3. 固定的单个 indexFile 文件大小约 400M
+   4. 一个 IndexFile 可以保存 2000W 个索引
+   5. IndexFile 底层存储结构为 HashMap
 
 # 消息的过滤
 
@@ -422,7 +449,7 @@ message.putUserProperty("customkey", "value");
 producer.send(message);
 ```
 
-再看消息着一端， 看订阅方法
+再看消费者一端， 看订阅方法
 
 ```java
 public void subscribe(String topic, MessageSelector messageSelector) throws MQClientException {
