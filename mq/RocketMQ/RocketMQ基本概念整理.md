@@ -13,3 +13,11 @@
 * Topic：区分消息的种类，一个发送者可以发送消息给一个或多个 Topic，一个消息的接收者可以订阅一个或多个 Topic 消息
 * Message Queue：相当于 Topic 的分区，用于并行发送和接收信息
 
+
+
+# 什么是 MessageQueue 和 ConsumerQueue
+
+
+
+
+
