@@ -70,7 +70,7 @@ GET /index-name/_search
 
 这种形式是 基于 Query DSL 进行查询的，下面就来讲解 Query DSL。
 
-### Query DSL
+# Query DSL
 
 这是一种基于  JSON 定义的查询语言，主要包含如下两种类型
 
@@ -94,7 +94,7 @@ GET /index-name/_search
   * function_score_query
   * boosting_query
 
-#### 全文匹配
+## 全文匹配
 
 ```java
 POST /index-name/_doc/1
@@ -121,7 +121,7 @@ GET /index-name/_doc/1/_termvectors?fields=name
 
 看到分词结果是将 “张三 李四” 最终分成了 “张”，“三”，“李”，“四”，其实也就不难看出我们查询的使用的是 “张 三”，那么也会先进行分词为 “张”，“三”，所以肯定是可以查询出来的，实际上就算使用 “张 五”等也是可以查询出来的，因为包含了 “张” 字。
 
-#### operator 参数
+## operator 参数
 
 上面我们说即使使用“张 五”也是可以查询出来的，就是因为虽然分成了 “张” 和 “五”，但是 “张” 是包含在文档中的，所以可以查询出来，那么怎么样做可以让查询的结果既包含 “张” 又包含 “五” 呢？ 答案就是使用 operator 参数配置 or 和 and 来使用。
 
